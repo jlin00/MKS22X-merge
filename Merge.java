@@ -51,12 +51,13 @@ public class Merge{
       while (r < right.length){ //if any elements not added from right side
         data[i] = right[r];
         i++; //increase merge index
-        r++; //increase right index 
+        r++; //increase right index
       }
-
     }
+  }
 
-
+  public static void mergeO(int[] data, int[] temp, int start, int end){
+    
   }
 
   public static void main(String[] args){
