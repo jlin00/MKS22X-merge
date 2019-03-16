@@ -3,16 +3,16 @@ import java.util.*;
 public class Merge{
   /*sort the array from least to greatest value. This is a wrapper function*/
   public static void mergesort(int[] data){
-    int[] temp = new int[data.length];
+    int[] temp = new int[data.length]; //copy over into a temporary array for optimized merge sort
     for (int i = 0; i < data.length; i++){
       temp[i] = data[i];
     }
-    //mergesortH(data, 0, data.length - 1);
-    mergesortO(data, temp, 0, data.length - 1);
+    //mergesortH(data, 0, data.length - 1); //unoptimized version
+    mergesortO(data, temp, 0, data.length - 1); //optimized version
   }
 
   //helper function for merge sort
-  public static void mergesortH(int[] data, int start, int end){
+  private static void mergesortH(int[] data, int start, int end){
     if (start < end){
       int mid = (end - start) / 2 + 1;
       int[] left = new int[mid]; //copy left side into new array
@@ -62,7 +62,8 @@ public class Merge{
     }
   }
 
-  public static void mergesortO(int[] data, int[] temp, int start, int end){
+  //optimized merge sort helper function
+  private static void mergesortO(int[] data, int[] temp, int start, int end){
     if (start < end){
       int mid = (end - start) / 2 + start; //middle of the data
 
@@ -100,17 +101,44 @@ public class Merge{
   }
 
   public static void main(String[] args){
-    int[] data = new int[]{6,4,-5,1,0,2,9,3,3,1,3};
-    mergesort(data);
-    System.out.println(Arrays.toString(data));
+    int[] testmerge;
+    int[] compare;
 
-    data = new int[]{3,0,1,5,3,2,1,9,4};
-    mergesort(data);
-    System.out.println(Arrays.toString(data));
+    //default values
+    int testcases = 10;
+    int max_size = 1000000;
+    int max_el = 3000;
 
-    data = new int[]{-1,-3,0,8,15,6,999};
-    mergesort(data);
-    System.out.println(Arrays.toString(data));
+    if (args.length >= 3){
+      testcases = Integer.parseInt(args[0]);
+      max_size = Integer.parseInt(args[1]);
+      max_el = Integer.parseInt(args[2]);
+    }
 
+    System.out.println("Number of testcases: " + testcases);
+    System.out.println("Maximum size of array: " + max_size);
+    System.out.println("Maximum value of elements in array: " + max_el);
+    System.out.println();
+
+    for (int i = 0; i < testcases; i++){
+      int size = (int)(Math.abs(Math.random() * max_size));
+      testmerge = new int[size];
+      compare = new int[size];
+      for (int j = 0; j < size; j++){
+        int el = (int)(Math.random() * max_el);
+        testmerge[j] = el;
+        compare[j] = el;
+      }
+
+      mergesort(testmerge);
+      Arrays.sort(compare);
+
+      if (!Arrays.equals(testmerge, compare)){
+        System.out.println("Failed tests.");
+        System.exit(0);
+      }
+
+    }
+    System.out.println("Passed all " + testcases + " test cases.");
   }
 }
