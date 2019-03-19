@@ -21,7 +21,7 @@ public class Merge{
         }
       data[start + j] = old_val; //performs the insertion
     }
-   }
+  }
 
   //helper function for merge sort
   private static void mergesortH(int[] data, int start, int end){
@@ -76,92 +76,89 @@ public class Merge{
 
   //optimized merge sort helper function
   private static void mergesortO(int[] data, int[] temp, int start, int end){
-    if (start < end){
-      if (data.length <= 1){
-        insertionSort(data,start,end);
-      }
+    /*
+    if (start >= end){
+      return;
+    }
+    */
 
+    //insertion sort already deals with cases where start >= end
+    if (end - start < 60){
+      insertionSort(data,start,end);
+      return;
+    }
+
+    int mid = (end - start) / 2 + start; //middle of the data
+
+    mergesortO(temp, data, start, mid); //sort left side, flip temp and data
+    mergesortO(temp, data, mid + 1, end); //sort right side, flip temp and data
+
+    int l = start; //start of left side
+    int r = mid + 1; //start of right side
+    int i = start; //keeps track of merge index
+
+    while (l <= mid && r <= end){ //loop through length of left and right sides
+      if (temp[l] <= temp[r]){ //if left is smaller than right
+        data[i] = temp[l]; //add to merged data
+        l++; //increase left index
+      }
       else{
-        int mid = (end - start) / 2 + start; //middle of the data
-
-        mergesortO(temp, data, start, mid); //sort left side, flip temp and data
-        mergesortO(temp, data, mid + 1, end); //sort right side, flip temp and data
-
-        int l = start; //start of left side
-        int r = mid + 1; //start of right side
-        int i = start; //keeps track of merge index
-
-        while (l <= mid && r <= end){ //loop through length of left and right sides
-          if (temp[l] <= temp[r]){ //if left is smaller than right
-            data[i] = temp[l]; //add to merged data
-            l++; //increase left index
-          }
-          else{
-            data[i] = temp[r]; //add to merged data
-            r++; //increase right index
-          }
-          i++; //increase merge index
-        }
-
-        while (l <= mid){ //if there are still numbers left in left side
-          data[i] = temp[l]; //add to merged data
-          i++; //increase merge index
-          l++; //increase left index
-        }
-
-        while (r <= end){ //if there are still numbers left in right side
-          data[i] = temp[r]; //add to merged data
-          i++; //increase merge index
-          r++; //increase right index
-        }
+        data[i] = temp[r]; //add to merged data
+        r++; //increase right index
       }
+      i++; //increase merge index
+    }
+
+    while (l <= mid){ //if there are still numbers left in left side
+      data[i] = temp[l]; //add to merged data
+      i++; //increase merge index
+      l++; //increase left index
+    }
+
+    while (r <= end){ //if there are still numbers left in right side
+      data[i] = temp[r]; //add to merged data
+      i++; //increase merge index
+      r++; //increase right index
     }
   }
 
   public static void main(String[] args){
-    int[] testmerge;
-    int[] compare;
-
-    //default values
-    int testcases = 10;
-    int max_size = 1000000;
-    int max_el = 3000;
-
-    if (args.length >= 3){
-      testcases = Integer.parseInt(args[0]);
-      max_size = Integer.parseInt(args[1]);
-      max_el = Integer.parseInt(args[2]);
-    }
-
-    System.out.println("Number of testcases: " + testcases);
-    System.out.println("Maximum size of array: " + max_size);
-    System.out.println("Maximum value of elements in array: " + max_el);
-    System.out.println();
-
-    for (int i = 0; i < testcases; i++){
-      int size = (int)(Math.abs(Math.random() * max_size));
-      testmerge = new int[size];
-      compare = new int[size];
-      for (int j = 0; j < size; j++){
-        int el = (int)(Math.random() * max_el);
-        testmerge[j] = el;
-        compare[j] = el;
-      }
-
-      mergesort(testmerge);
-      Arrays.sort(compare);
-
-      if (!Arrays.equals(testmerge, compare)){
-        System.out.println("Failed tests.");
-        System.exit(0);
-      }
-
-    }
-    System.out.println("Passed all " + testcases + " test cases.");
-
     //testing insertion insertionSort
     //int[] array = new int[]{2,3,1,0,3,4,1,8,7,9};
-    //insertionSort(array, 2, 6);
+    //insertionSort(array, 8, 6);
     //System.out.println(Arrays.toString(array)); //should print {2,3,0,1,1,3,4,8,7,9}
+
+    System.out.println("Size\t\tMax Value\tmerge /builtin ratio ");
+    int[]MAX_LIST = {1000000000,500,10};
+    for(int MAX : MAX_LIST){
+      for(int size = 31250; size < 2000001; size*=2){
+        long qtime=0;
+        long btime=0;
+        //average of 5 sorts.
+        for(int trial = 0 ; trial <=5; trial++){
+          int []data1 = new int[size];
+          int []data2 = new int[size];
+          for(int i = 0; i < data1.length; i++){
+            data1[i] = (int)(Math.random()*MAX);
+            data2[i] = data1[i];
+          }
+          long t1,t2;
+          t1 = System.currentTimeMillis();
+          Merge.mergesort(data2);
+          t2 = System.currentTimeMillis();
+          qtime += t2 - t1;
+          t1 = System.currentTimeMillis();
+          Arrays.sort(data1);
+          t2 = System.currentTimeMillis();
+          btime+= t2 - t1;
+          if(!Arrays.equals(data1,data2)){
+            System.out.println("FAIL TO SORT!");
+            System.exit(0);
+          }
+        }
+        System.out.println(size +"\t\t"+MAX+"\t"+1.0*qtime/btime);
+      }
+      System.out.println();
+    }
   }
 }
