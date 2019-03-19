@@ -77,37 +77,43 @@ public class Merge{
   //optimized merge sort helper function
   private static void mergesortO(int[] data, int[] temp, int start, int end){
     if (start < end){
-      int mid = (end - start) / 2 + start; //middle of the data
+      if (data.length <= 1){
+        insertionSort(data,start,end);
+      }
 
-      mergesortO(temp, data, start, mid); //sort left side, flip temp and data
-      mergesortO(temp, data, mid + 1, end); //sort right side, flip temp and data
+      else{
+        int mid = (end - start) / 2 + start; //middle of the data
 
-      int l = start; //start of left side
-      int r = mid + 1; //start of right side
-      int i = start; //keeps track of merge index
+        mergesortO(temp, data, start, mid); //sort left side, flip temp and data
+        mergesortO(temp, data, mid + 1, end); //sort right side, flip temp and data
 
-      while (l <= mid && r <= end){ //loop through length of left and right sides
-        if (temp[l] <= temp[r]){ //if left is smaller than right
+        int l = start; //start of left side
+        int r = mid + 1; //start of right side
+        int i = start; //keeps track of merge index
+
+        while (l <= mid && r <= end){ //loop through length of left and right sides
+          if (temp[l] <= temp[r]){ //if left is smaller than right
+            data[i] = temp[l]; //add to merged data
+            l++; //increase left index
+          }
+          else{
+            data[i] = temp[r]; //add to merged data
+            r++; //increase right index
+          }
+          i++; //increase merge index
+        }
+
+        while (l <= mid){ //if there are still numbers left in left side
           data[i] = temp[l]; //add to merged data
+          i++; //increase merge index
           l++; //increase left index
         }
-        else{
+
+        while (r <= end){ //if there are still numbers left in right side
           data[i] = temp[r]; //add to merged data
+          i++; //increase merge index
           r++; //increase right index
         }
-        i++; //increase merge index
-      }
-
-      while (l <= mid){ //if there are still numbers left in left side
-        data[i] = temp[l]; //add to merged data
-        i++; //increase merge index
-        l++; //increase left index
-      }
-
-      while (r <= end){ //if there are still numbers left in right side
-        data[i] = temp[r]; //add to merged data
-        i++; //increase merge index
-        r++; //increase right index
       }
     }
   }
@@ -154,8 +160,8 @@ public class Merge{
     System.out.println("Passed all " + testcases + " test cases.");
 
     //testing insertion insertionSort
-    int[] array = new int[]{2,3,1,0,3,4,1,8,7,9};
-    insertionSort(array, 2, 6);
-    System.out.println(Arrays.toString(array)); //should print {2,3,0,1,1,3,4,8,7,9}
+    //int[] array = new int[]{2,3,1,0,3,4,1,8,7,9};
+    //insertionSort(array, 2, 6);
+    //System.out.println(Arrays.toString(array)); //should print {2,3,0,1,1,3,4,8,7,9}
   }
 }
