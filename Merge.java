@@ -11,6 +11,17 @@ public class Merge{
     mergesortO(data, temp, 0, data.length - 1); //optimized version
   }
 
+  public static void insertionSort(int[] data){
+   for (int i = 1; i < data.length; i++){
+     int old_val = data[i]; //keeps track of the value that is being shifted
+     int j;
+     for (j = i; j > 0 && old_val < data[j - 1]; j--){ //loops through backwards to calculate new_ind
+         data[j] = data[j - 1]; //shifts down value in that spot by one
+       }
+     data[j] = old_val; //performs the insertion
+   }
+   }
+
   //helper function for merge sort
   private static void mergesortH(int[] data, int start, int end){
     if (start < end){
