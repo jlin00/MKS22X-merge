@@ -12,15 +12,15 @@ public class Merge{
   }
 
   public static void insertionSort(int[] data, int start, int end){
-    int length = end - start;
-   for (int i = 1; i < length; i++){
-     int old_val = data[start + i]; //keeps track of the value that is being shifted
-     int j;
-     for (j = i; j > 0 && old_val < data[start + j - 1]; j--){ //loops through backwards to calculate new_ind
-         data[start + j] = data[start + j - 1]; //shifts down value in that spot by one
-       }
-     data[start + j] = old_val; //performs the insertion
-   }
+    int length = end - start + 1;
+    for (int i = 1; i < length; i++){
+      int old_val = data[start + i]; //keeps track of the value that is being shifted
+      int j;
+      for (j = i; j > 0 && old_val < data[start + j - 1]; j--){ //loops through backwards to calculate new_ind
+          data[start + j] = data[start + j - 1]; //shifts down value in that spot by one
+        }
+      data[start + j] = old_val; //performs the insertion
+    }
    }
 
   //helper function for merge sort
@@ -152,5 +152,10 @@ public class Merge{
 
     }
     System.out.println("Passed all " + testcases + " test cases.");
+
+    //testing insertion insertionSort
+    int[] array = new int[]{2,3,1,0,3,4,1,8,7,9};
+    insertionSort(array, 2, 6);
+    System.out.println(Arrays.toString(array)); //should print {2,3,0,1,1,3,4,8,7,9}
   }
 }
