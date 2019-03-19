@@ -11,14 +11,15 @@ public class Merge{
     mergesortO(data, temp, 0, data.length - 1); //optimized version
   }
 
-  public static void insertionSort(int[] data){
-   for (int i = 1; i < data.length; i++){
-     int old_val = data[i]; //keeps track of the value that is being shifted
+  public static void insertionSort(int[] data, int start, int end){
+    int length = end - start;
+   for (int i = 1; i < length; i++){
+     int old_val = data[start + i]; //keeps track of the value that is being shifted
      int j;
-     for (j = i; j > 0 && old_val < data[j - 1]; j--){ //loops through backwards to calculate new_ind
-         data[j] = data[j - 1]; //shifts down value in that spot by one
+     for (j = i; j > 0 && old_val < data[start + j - 1]; j--){ //loops through backwards to calculate new_ind
+         data[start + j] = data[start + j - 1]; //shifts down value in that spot by one
        }
-     data[j] = old_val; //performs the insertion
+     data[start + j] = old_val; //performs the insertion
    }
    }
 
